@@ -6,7 +6,7 @@ Yard makes working on multiple local projects simpler by routing each server to
 ## Install
 
 ```bash
-npm add -g @kranehq/yard`
+npm add -g @kranehq/yard
 ```
 
 ## Usage
