@@ -7,18 +7,41 @@ export type YardConfig = {
     port?: number | undefined;
 };
 
-export type ParsedYardConfig = Awaited<ReturnType<typeof parseConfig>>;
+export type ParsedYardConfig = Exclude<
+    Awaited<ReturnType<typeof parseConfig>>,
+    undefined
+>;
+
+export const helpText = `Yard routes local dev servers to stable *.localhost hostnames.
+
+Usage:
+  yard [options] -- <command> [args...]
+
+Options:
+  -n, --name <name>      Project hostname prefix (required unless in config)
+  -p, --port <port>      Public proxy port (default: 3000)
+  -c, --config <path>    Config module path (default: ./yard.config.ts)
+  -h, --help             Show help
+
+Examples:
+  yard -n myapp -- bun run dev
+  yard -n api -p 4000 -- bun run dev
+  yard -c ./yard.config.ts -- bun run dev`;
 
 const options = {
     config: { type: "string", short: "c" },
+    help: { type: "boolean", short: "h" },
     name: { type: "string", short: "n" },
     port: { type: "string", short: "p" },
-} satisfies Record<"config" | keyof YardConfig, ParseArgsOptionDescriptor>;
+} satisfies Record<
+    "config" | "help" | keyof YardConfig,
+    ParseArgsOptionDescriptor
+>;
 
 const splitArgs = (argv: string[]) => {
     const splitIndex = argv.indexOf("--");
     if (splitIndex === -1) {
-        return { optionArgs: [] as string[], positionals: argv };
+        return { optionArgs: argv, positionals: [] as string[] };
     }
     return {
         optionArgs: argv.slice(0, splitIndex),
@@ -34,6 +57,10 @@ export const parseConfig = async (argv = process.argv.slice(2)) => {
         strict: true,
         allowPositionals: false,
     });
+
+    if (args.values.help) {
+        return undefined;
+    }
 
     const configPath = resolve(args.values.config ?? "yard.config.ts");
     const configExists = await access(configPath)

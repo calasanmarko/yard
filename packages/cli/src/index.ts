@@ -6,7 +6,7 @@ import {
     createServer as createNetServer,
     type Server,
 } from "node:net";
-import { parseConfig, type ParsedYardConfig } from "./cli.js";
+import { helpText, parseConfig, type ParsedYardConfig } from "./cli.js";
 
 const listen = (server: Server, port: number, host: string) =>
     new Promise<void>((resolve, reject) => {
@@ -160,10 +160,14 @@ const yard = async ({
 
 export const main = async () => {
     const config = await parseConfig();
+    if (!config) {
+        console.log(helpText);
+        process.exit(0);
+    }
+
     if (config.positionals.length === 0) {
-        console.error(
-            "Missing command. Usage: yard [--project <name>] <command ...>"
-        );
+        console.error("Missing command.\n");
+        console.error(helpText);
         process.exit(1);
     }
 

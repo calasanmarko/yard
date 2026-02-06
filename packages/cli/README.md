@@ -33,15 +33,24 @@ http://myapp.localhost:3000
 
 ## CLI
 
-```bash
-yard [options] -- <command> [...args]
+```txt
+$ yard --help
+Yard routes local dev servers to stable *.localhost hostnames.
+
+Usage:
+  yard [options] -- <command> [args...]
+
+Options:
+  -n, --name <name>      Project hostname prefix (required unless in config)
+  -p, --port <port>      Public proxy port (default: 3000)
+  -c, --config <path>    Config module path (default: ./yard.config.ts)
+  -h, --help             Show help
+
+Examples:
+  yard -n myapp -- bun run dev
+  yard -n api -p 4000 -- bun run dev
+  yard -c ./yard.config.ts -- bun run dev
 ```
-
-### Options
-
-- `-n, --name <name>`: required project hostname prefix.
-- `-p, --port <port>`: public proxy port (default `3000`).
-- `-c, --config <path>`: path to config file (default `yard.config.ts`).
 
 ### Environment Variables Passed To Your Command
 
