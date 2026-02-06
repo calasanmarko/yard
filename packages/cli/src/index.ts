@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { spawn } from "node:child_process";
 import {
     connect,
@@ -91,7 +93,17 @@ const findFreePort = () =>
         });
     });
 
-const spawnCommand = (positionals: string[], port: number) =>
+const spawnCommand = ({
+    positionals,
+    host,
+    port,
+    publicPort,
+}: {
+    positionals: string[];
+    host: string;
+    port: number;
+    publicPort: number;
+}) =>
     new Promise<number>((resolveCode, reject) => {
         const [command, ...args] = positionals;
         if (!command) {
@@ -100,7 +112,12 @@ const spawnCommand = (positionals: string[], port: number) =>
         }
 
         const child = spawn(command, args, {
-            env: { ...process.env, YARD_PORT: String(port) },
+            env: {
+                ...process.env,
+                YARD_HOST: host,
+                YARD_PORT: String(port),
+                YARD_PUBLIC_PORT: String(publicPort),
+            },
             stdio: "inherit",
         });
 
@@ -114,7 +131,7 @@ const spawnCommand = (positionals: string[], port: number) =>
         });
     });
 
-const runCommand = async ({
+const yard = async ({
     name,
     positionals,
     port: proxyPort = 3000,
@@ -127,13 +144,18 @@ const runCommand = async ({
     });
 
     try {
-        return await spawnCommand(positionals, targetPort);
+        return await spawnCommand({
+            positionals,
+            host: `${name}.localhost`,
+            port: targetPort,
+            publicPort: proxyPort,
+        });
     } finally {
         await stopProxy();
     }
 };
 
-const main = async () => {
+export const main = async () => {
     const config = await parseConfig();
     if (config.positionals.length === 0) {
         console.error(
@@ -142,13 +164,10 @@ const main = async () => {
         process.exit(1);
     }
 
-    const code = await runCommand(config);
+    const code = await yard(config);
     process.exit(code);
 };
 
 if (import.meta.main) {
-    main().catch((error) => {
-        console.error(error);
-        process.exit(1);
-    });
+    await main();
 }
