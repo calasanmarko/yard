@@ -1,4 +1,5 @@
-import { readFile } from "node:fs/promises";
+import { access } from "node:fs/promises";
+import { resolve } from "node:path";
 import { parseArgs, type ParseArgsOptionDescriptor } from "node:util";
 
 export type YardConfig = {
@@ -34,20 +35,23 @@ export const parseConfig = async (argv = process.argv.slice(2)) => {
         allowPositionals: false,
     });
 
-    const fileConfigText = await readFile(
-        args.values.config ?? "yard.config.ts",
-        "utf8"
-    ).catch((e) => {
-        if (!args.values.config && e.code === "ENOENT") {
-            return undefined;
-        }
-        throw e;
-    });
+    const configPath = resolve(args.values.config ?? "yard.config.ts");
+    const configExists = await access(configPath)
+        .then(() => true)
+        .catch((e) => {
+            if (e.code === "ENOENT") {
+                return false;
+            }
+            throw e;
+        });
 
-    const fileConfig =
-        fileConfigText === undefined
-            ? undefined
-            : (JSON.parse(fileConfigText) as YardConfig);
+    if (args.values.config && !configExists) {
+        throw new Error(`Config file ${configPath} does not exist`);
+    }
+
+    const fileConfig = configExists
+        ? ((await import(configPath)).default as YardConfig)
+        : undefined;
 
     const parsedConfig = {
         ...fileConfig,

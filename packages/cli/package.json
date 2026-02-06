@@ -1,6 +1,28 @@
 {
   "name": "@kranehq/yard",
-  "version": "0.0.1",
+  "version": "0.0.4",
+  "description": "CLI for routing local dev servers to stable *.localhost hostnames",
+  "keywords": [
+    "yard",
+    "localhost",
+    "dev-proxy",
+    "development",
+    "cli",
+    "vite"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/calasanmarko/yard.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/calasanmarko/yard/issues"
+  },
+  "homepage": "https://github.com/calasanmarko/yard/tree/main/packages/cli",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "bin": {
     "yard": "dist/index.js"

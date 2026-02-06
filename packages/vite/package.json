@@ -1,6 +1,28 @@
 {
   "name": "@kranehq/yard-vite",
-  "version": "0.0.1",
+  "version": "0.0.3",
+  "description": "Vite plugin for Yard local hostname routing",
+  "keywords": [
+    "yard",
+    "vite",
+    "vite-plugin",
+    "localhost",
+    "dev-proxy",
+    "development"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/calasanmarko/yard.git",
+    "directory": "packages/vite"
+  },
+  "bugs": {
+    "url": "https://github.com/calasanmarko/yard/issues"
+  },
+  "homepage": "https://github.com/calasanmarko/yard/tree/main/packages/vite",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "exports": {
     ".": {

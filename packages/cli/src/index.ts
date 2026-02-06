@@ -142,6 +142,9 @@ const yard = async ({
         proxyPort,
         name,
     });
+    console.log(
+        `[Yard] Proxying http://${name}.localhost:${proxyPort} -> http://localhost:${targetPort}`
+    );
 
     try {
         return await spawnCommand({
