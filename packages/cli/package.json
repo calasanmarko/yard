@@ -1,0 +1,13 @@
+{
+    "name": "@yard/cli",
+    "version": "0.0.1",
+    "bin": {
+        "yard": "src/index.ts"
+    },
+    "scripts": {
+        "check": "tsc --noEmit",
+        "format": "prettier --write .",
+        "lint": "eslint ."
+    },
+    "type": "module"
+}

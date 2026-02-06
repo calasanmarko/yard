@@ -1,0 +1,18 @@
+{
+    "singleAttributePerLine": true,
+    "tabWidth": 4,
+    "trailingComma": "es5",
+    "printWidth": 80,
+    "plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+    "proseWrap": "always",
+    "overrides": [
+        { "files": "*.svelte", "options": { "parser": "svelte" } },
+        { "files": "*.yaml", "options": { "tabWidth": 2 } },
+        { "files": "*.yml", "options": { "tabWidth": 2 } },
+        { "files": "package.json", "options": { "tabWidth": 2 } },
+        {
+            "files": "packages/web/src/lib/assets/code/**/*.ts",
+            "options": { "printWidth": 60, "tabWidth": 2 }
+        }
+    ]
+}
